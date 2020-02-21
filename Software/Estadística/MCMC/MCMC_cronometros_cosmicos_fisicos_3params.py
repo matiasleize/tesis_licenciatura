@@ -110,7 +110,7 @@ def params_to_chi2(theta,params_fijos):
     chi = chi_2_cronometros(H_teo,H_data,dH)
     return chi
 
-    
+
 b_true = 0.22
 omega_m_true = 0.26
 H_0_true =  73.48 #Unidades de km/seg/Mpc
