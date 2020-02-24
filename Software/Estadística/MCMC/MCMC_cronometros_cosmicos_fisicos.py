@@ -115,13 +115,6 @@ omega_m_true = 0.26
 np.random.seed(42)
 
 log_likelihood = lambda theta: -0.5 * params_to_chi2(theta, params_fijos=[r_0,n])
-nll = lambda *args: -log_likelihood(*args)
-initial = np.array([omega_m_true,b_true]) + 0.1 * np.random.randn(2)
-soln = minimize(nll, initial)#,bounds =([0,1],[-0.5,0.5]))
-omega_m_ml, b_ml = soln.x
-
-print(omega_m_ml,b_ml)
-
 #%%
 omega_m_ml = 0.3096714153011233
 b_ml = 0.20617356988288155
@@ -142,6 +135,10 @@ def log_probability(theta):
     return lp + log_likelihood(theta)
 pos = soln + 1e-4 * np.random.randn(12, 2)
 nwalkers, ndim = pos.shape
+
+# Initialize the walkers
+coords = np.random.randn(32, 5)
+nwalkers, ndim = coords.shape
 #%%
 # Set up the backend
 # Don't forget to clear it in case the file already exists
@@ -152,10 +149,8 @@ backend.reset(nwalkers, ndim)
 
 sampler = emcee.EnsembleSampler(nwalkers, ndim, log_probability)
 
-
-
 #%%
-max_n = 100000
+max_n = 1000
 
 # We'll track how the average autocorrelation time estimate changes
 index = 0
@@ -163,7 +158,7 @@ autocorr = np.empty(max_n)
 
 # This will be useful to testing convergence
 old_tau = np.inf
-
+#%%
 # Now we'll sample for up to max_n steps
 for sample in sampler.sample(coords, iterations=max_n, progress=True):
     # Only check convergence every 100 steps
