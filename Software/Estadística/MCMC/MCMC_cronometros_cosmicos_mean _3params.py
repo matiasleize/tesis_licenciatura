@@ -125,10 +125,6 @@ print(omega_m_ml,b_ml)
 #%%
 omega_m_ml = 0.3096714153011233
 b_ml = 0.20617356988288155
-
-soln = np.array([omega_m_ml,b_ml])
-print(soln)
-
 def log_prior(theta):
     omega_m, b = theta
     if 0 < omega_m < 1 and -1 < b < 1:
@@ -140,7 +136,7 @@ def log_probability(theta):
     if not np.isfinite(lp):
         return -np.inf
     return lp + log_likelihood(theta)
-pos = soln + 1e-4 * np.random.randn(12, 2)
+pos = soln.x + 1e-4 * np.random.randn(12, 2)
 nwalkers, ndim = pos.shape
 #%%
 # Set up the backend
